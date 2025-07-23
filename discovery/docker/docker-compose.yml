@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  eureka-peer1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILE=peer1
+      - EUREKA_HOSTNAME=peer1.eureka.local
+      - SERVER_PORT=8761
+      - EUREKA_DEFAULT_ZONE=http://eureka:password@eureka-peer2:8762/eureka/
+      - EUREKA_USERNAME=eureka
+      - EUREKA_PASSWORD=password
+      - LOGGING_FILE_PATH=/logs
+    ports:
+      - "8761:8761"
+    volumes:
+      - ./logs:/logs
+    networks:
+      - eureka-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  eureka-peer2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILE=peer2
+      - EUREKA_HOSTNAME=peer2.eureka.local
+      - SERVER_PORT=8762
+      - EUREKA_DEFAULT_ZONE=http://eureka:password@eureka-peer1:8761/eureka/
+      - EUREKA_USERNAME=eureka
+      - EUREKA_PASSWORD=password
+      - LOGGING_FILE_PATH=/logs
+    ports:
+      - "8762:8762"
+    volumes:
+      - ./logs:/logs
+    networks:
+      - eureka-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8762/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  eureka-net:
+    driver: bridge

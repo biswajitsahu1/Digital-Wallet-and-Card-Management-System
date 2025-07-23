@@ -1,0 +1,11 @@
+server:
+  port: ${PEER1_PORT:8761}
+
+eureka:
+  instance:
+    hostname: peer1.eureka.local
+  client:
+    #registerWithEureka: true
+    #fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${EUREKA_USERNAME:eureka}:${EUREKA_PASSWORD:password}@peer2.eureka.local:8762/eureka/
