@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: Eureka Server Discovery API
+  version: 1.0.0
+  description: API documentation for Eureka Server discovery
+paths:
+  /eureka/apps:
+    get:
+      summary: Retrieve registered applications
+      responses:
+        '200':
+          description: List of registered applications
+          content:
+            application/json:
+              schema:
+                type: object
+  /actuator/health:
+    get:
+      summary: Health check endpoint
+      responses:
+        '200':
+          description: Health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
