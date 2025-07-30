@@ -7,18 +7,31 @@ spring:
 
   datasource:
     url: jdbc:oracle:thin:@localhost:1521/XEPDB1
-    username: ${ORACLE_USERNAME}
-    password: ${ORACLE_PASSWORD}
+    username: ${ORACLE_USERNAME:userdb}
+    password: ${ORACLE_PASSWORD:userdb_password}
+    driver-class-name: oracle.jdbc.OracleDriver
 
   data:
     mongodb:
-      uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@localhost:27017/${MONGO_INITDB_DATABASE}
+      uri: mongodb://${MONGO_USERNAME:mongo_user}:${MONGO_PASSWORD:mongo_pass}@localhost:27017/${MONGO_INITDB_DATABASE:userlogs}
 
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_USERNAME:eureka}:${EUREKA_PASSWORD:password}@${EUREKA_HOSTNAME:localhost}:${SERVER_PORT:8761}/eureka/
 
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  config: classpath:logback-spring.xml
+  file:
+    path: logs
