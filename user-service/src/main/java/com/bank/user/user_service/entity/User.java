@@ -1,6 +1,6 @@
 package com.bank.user.user_service.entity;
 
-import com.bank.user.user_service.config.Auditable;
+import com.bank.user.user_service.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,5 +30,5 @@ public class User extends Auditable {
     private String password;
 
     @Column(nullable = false)
-    private String role;
+    private String role="user";
 }

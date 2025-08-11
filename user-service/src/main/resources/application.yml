@@ -22,10 +22,34 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:demo.demo0202s@gmail.com}
+    password: ${MAIL_PASSWORD:euuhhgmasktovxkp}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+
 eureka:
   client:
     serviceUrl:
       defaultZone: http://${EUREKA_USERNAME:eureka}:${EUREKA_PASSWORD:password}@${EUREKA_HOSTNAME:localhost}:${SERVER_PORT:8761}/eureka/
+
+jwt:
+  secret: dGhpc2lzYXNlY3VyZXRlc3RrZXlmb3Jqd3RzaWduYXR1cmVhdXRoZW50aWNhdGlvbmFuZGF1dGhvcml6YXRpb24  # use the full Base64 string here
+  expiration-ms: 3600000
+
+
 
 logging:
   level:

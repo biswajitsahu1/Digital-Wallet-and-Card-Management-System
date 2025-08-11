@@ -1,4 +1,4 @@
-package com.bank.user.user_service.config;
+package com.bank.user.user_service.audit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Auditable {
 
+    /**
+     *
+     */
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     protected LocalDateTime createdAt;

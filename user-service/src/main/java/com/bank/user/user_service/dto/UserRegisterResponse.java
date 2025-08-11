@@ -12,6 +12,7 @@ public class UserRegisterResponse {
     private String username;
     private String email;
     private String role;
-    private String message="Successfully Registered";
 
+    @Builder.Default
+    private String message="Successfully Registered";
 }

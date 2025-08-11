@@ -3,35 +3,27 @@ package com.bank.user.user_service.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
-@Data @AllArgsConstructor
-@Schema(
-        name = "ErrorResponse",
-        description = "Schema to hold error response information"
-)
+@Data
+@AllArgsConstructor
+@Schema(name = "ErrorResponse", description = "Standard error response format")
 public class ErrorResponseDto {
 
-    @Schema(
-            description = "API path invoked by client"
-    )
-    private  String apiPath;
+    @Schema(description = "Request path where the error occurred")
+    private String path;
 
-    @Schema(
-            description = "Error code representing the error happened"
-    )
-    private HttpStatus errorCode;
+    @Schema(description = "HTTP status code")
+    private String status;
 
-    @Schema(
-            description = "Error message representing the error happened"
-    )
-    private  String errorMessage;
+    @Schema(description = "Error message")
+    private String message;
 
-    @Schema(
-            description = "Time representing when the error happened"
-    )
-    private LocalDateTime errorTime;
+    @Schema(description = "Timestamp of the error")
+    private LocalDateTime timestamp;
 
+    @Schema(description = "Request trace ID (useful for debugging)")
+    private String traceId;
 }
