@@ -4,3 +4,9 @@ server:
 spring:
   application:
     name: api-gateway
+
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          jwk-set-uri: http://localhost:7080/realms/myrealm/protocol/openid-connect/certs
