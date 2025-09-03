@@ -4856,3 +4856,5 @@ Caused by: java.net.ConnectException: Connection refused
 2025-09-03 11:38:23.430 | INFO  | user-service, 1.0.0 | Started UserServiceApplication in 6.662 seconds (process running for 7.873)
 2025-09-03 11:43:22.803 | INFO  | user-service, 1.0.0 | Resolving eureka endpoints via configuration
 2025-09-03 11:48:22.854 | INFO  | user-service, 1.0.0 | Resolving eureka endpoints via configuration
+2025-09-03 11:53:22.874 | INFO  | user-service, 1.0.0 | Resolving eureka endpoints via configuration
+2025-09-03 11:58:22.894 | INFO  | user-service, 1.0.0 | Resolving eureka endpoints via configuration
