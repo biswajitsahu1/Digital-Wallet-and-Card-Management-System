@@ -9,7 +9,6 @@ import com.bank.user.user_service.mapper.UserMapper;
 import com.bank.user.user_service.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,18 +20,21 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
     private final EmailClient emailClient;
 
     public UserService(UserRepository userRepository,
                        UserMapper userMapper,
-                       PasswordEncoder passwordEncoder,
                        EmailClient emailClient) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
         this.emailClient = emailClient;
     }
+
+    /**
+     *
+     * @param request as UserRegisterRequest
+     * @return savedUser as UserRegisterResponse
+     */
 
     @Transactional
     public UserRegisterResponse registerUser(UserRegisterRequest request) {
@@ -41,7 +43,8 @@ public class UserService {
         checkDuplicate(request.getUsername(), request.getEmail());
 
         User user = userMapper.toEntity(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        // Store password as plain text (not recommended for production)
+        user.setPassword(request.getPassword());
         User savedUser = userRepository.save(user);
 
         sendWelcomeEmail(savedUser);
@@ -51,23 +54,23 @@ public class UserService {
     }
 
     private void checkDuplicate(String username, String email) {
-        boolean usernameExists = userRepository.existsByUsername(username);
-        boolean emailExists = userRepository.existsByEmail(email);
-
-        if (usernameExists || emailExists) {
-            String msg;
-            if (usernameExists && emailExists) {
-                msg = "Username and email already exist";
-            } else if (usernameExists) {
-                msg = "Username already exists";
-            } else {
-                msg = "Email already exists";
-            }
+        String msg = "";
+        if (userRepository.existsByUsername(username)) {
+            msg = "Username " + username + " is already taken";
+        } else if (userRepository.existsByEmail(email)) {
+            msg = "Email " + email + " is already in use";
+        }
+        
+        if (!msg.isEmpty()) {
             log.warn("Registration failed - {}", msg);
             throw new UserAlreadyExistsException(msg);
         }
     }
 
+    /**
+     *
+     * @param user as User
+     */
     private void sendWelcomeEmail(User user) {
         try {
             emailClient.sendSuccessRegistrationEmail(user.getEmail(), user.getUsername());

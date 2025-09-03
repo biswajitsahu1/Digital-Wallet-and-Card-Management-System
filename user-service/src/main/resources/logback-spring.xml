@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
+    <!-- Define properties -->
+    <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="user-service"/>
+    <springProperty scope="context" name="appVersion" source="spring.application.version" defaultValue="1.0.0"/>
 
     <!-- Properties -->
     <property name="LOG_PATH" value="user-service/logs" />
     <property name="LOG_FILE" value="${LOG_PATH}/user-service.log" />
 
-    <!-- Console Appender (for dev) -->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- File Appender -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>${LOG_FILE}</file>
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/eureka-server.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | ${appName:-}, ${appVersion:-} | %msg%n%ex</pattern>
+            <charset>utf8</charset>
+        </encoder>
     </appender>
 
-    <!-- Console Appender (for prod) -->
+    <!-- Console log pattern -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | ${appName:-}, ${appVersion:-} | %msg%n%ex"/>
+
+
+    <!-- Console Appender with custom pattern -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | ${spring.application.name:-}, ${appVersion:-} | %msg%n</pattern>
+        </encoder>
     </appender>
 
     <root level="INFO">
@@ -25,8 +34,9 @@
         <appender-ref ref="FILE" />
     </root>
 
-    <!-- Optional: Customize Eureka logging level -->
-    <logger name="com.netflix.eureka" level="DEBUG"/>
-    <logger name="org.springframework.cloud.netflix.eureka" level="DEBUG"/>
+    <!-- Custom log levels -->
+    <logger name="com.bank.user" level="DEBUG"/>
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
 
 </configuration>

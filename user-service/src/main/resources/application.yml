@@ -1,12 +1,13 @@
 server:
-  port: 8081
+  port: ${EUREKA_SERVER_PORT:8081}
 
 spring:
   application:
     name: user-service
+    version: 1.0.0
 
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+    url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
     username: ${ORACLE_USERNAME:userdb}
     password: ${ORACLE_PASSWORD:userdb_password}
     driver-class-name: oracle.jdbc.OracleDriver
@@ -45,17 +46,19 @@ eureka:
     serviceUrl:
       defaultZone: http://${EUREKA_USERNAME:eureka}:${EUREKA_PASSWORD:password}@${EUREKA_HOSTNAME:localhost}:${SERVER_PORT:8761}/eureka/
 
-jwt:
-  secret: dGhpc2lzYXNlY3VyZXRlc3RrZXlmb3Jqd3RzaWduYXR1cmVhdXRoZW50aWNhdGlvbmFuZGF1dGhvcml6YXRpb24  # use the full Base64 string here
-  expiration-ms: 3600000
+#jwt:
+#  secret: dGhpc2lzYXNlY3VyZXRlc3RrZXlmb3Jqd3RzaWduYXR1cmVhdXRoZW50aWNhdGlvbmFuZGF1dGhvcml6YXRpb24  # use the full Base64 string here
+#  expiration-ms: 3600000
 
 
 
 logging:
   level:
-    root: INFO
+    com.bank.user: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
   config: classpath:logback-spring.xml
   file:
     path: logs
+  pattern:
+    console: "%5p[${spring.application.name}],[${spring.application.instance_id},%X{traceId},%X{spanId}] %m%n"
